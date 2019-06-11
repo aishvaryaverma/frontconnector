@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://vsonu9020:vsonu9020@devconnector-slwll.mongodb.net/test?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://vsonu9020:vsonu9020@devconnector-slwll.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtToken": "mySecretToken"
 }
