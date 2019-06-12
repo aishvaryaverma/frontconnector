@@ -69,7 +69,7 @@ route.post('/', [
         // Return jsonwebtoken
         jwt.sign(
             payload,
-            config.get('jwtToken'),
+            config.get('jwtSecret'),
             { expiresIn: 360000 },
             function(err, token) {
                 if(err) throw err;
