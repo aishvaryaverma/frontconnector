@@ -1,5 +1,5 @@
 const express = require('express');
-const route = express.Router();
+const router = express.Router();
 const { check, validationResult } = require('express-validator/check');
 
 const User = require('../../modals/User');
@@ -13,7 +13,7 @@ const config = require('config');
  * @desc        Register user
  * @access      Public
  */
-route.post('/', [
+router.post('/', [
     check('name', 'Name is required').not().isEmpty(),
     check('email', 'Please enter a valid email').isEmail(),
     check('password', 'Please enter min 6 characters required').isLength({ min: 6 })
@@ -83,4 +83,4 @@ route.post('/', [
     }
 });
 
-module.exports = route;
+module.exports = router;

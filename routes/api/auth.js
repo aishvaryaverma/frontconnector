@@ -1,5 +1,5 @@
 const express = require('express');
-const route = express.Router();
+const router = express.Router();
 
 const auth = require('../../middleware/auth');
 const User = require('../../modals/User');
@@ -14,7 +14,7 @@ const { check, validationResult } = require('express-validator/check');
  * @desc        Get User if Authorized
  * @access      Public
  */
-route.get('/', auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);
@@ -30,7 +30,7 @@ route.get('/', auth, async (req, res) => {
  * @desc        Authenticate user and get Token
  * @access      Public
  */
-route.post('/', [
+router.post('/', [
     check('email', 'Please enter a valid email').isEmail(),
     check('password', 'Password is required').exists()
 ], async (req, res) => {
@@ -79,4 +79,4 @@ route.post('/', [
     }
 });
 
-module.exports = route;
+module.exports = router;

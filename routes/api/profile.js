@@ -1,5 +1,5 @@
 const express = require('express');
-const route = express.Router();
+const router = express.Router();
 const auth = require('../../middleware/auth');
 const request = require('request');
 const config = require('config');
@@ -14,7 +14,7 @@ const { check, validationResult } = require('express-validator/check');
  * @desc        Get current user profile
  * @access      Private
  */
-route.get('/me', auth, async (req, res) => {
+router.get('/me', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id }).populate('user', ['name', 'avatar']);
         if(!profile) {
@@ -32,7 +32,7 @@ route.get('/me', auth, async (req, res) => {
  * @desc        Add/Update user profile
  * @access      Private
  */
-route.post('/', [auth, [
+router.post('/', [auth, [
         check('status', 'Status is Required').not().isEmpty(),
         check('skills', 'Skills is Required').not().isEmpty()
     ]], async (req, res) => {
@@ -108,7 +108,7 @@ route.post('/', [auth, [
  * @desc        Get all profiles
  * @access      Public
  */
-route.get('/', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const profiles = await Profile.find().populate('user', ['name', 'avatar']);
         res.json(profiles);
@@ -123,7 +123,7 @@ route.get('/', async (req, res) => {
  * @desc        Get profile by user id
  * @access      Public
  */
-route.get('/user/:user_id', async (req, res) => {
+router.get('/user/:user_id', async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.params.user_id }).populate('user', ['name', 'avatar']);
 
@@ -142,7 +142,7 @@ route.get('/user/:user_id', async (req, res) => {
  * @desc        Delete profile, user and posts
  * @access      Private
  */
-route.delete('/', auth, async (req, res) => {
+router.delete('/', auth, async (req, res) => {
     try {
         // @TODO - Delte Post
 
@@ -164,7 +164,7 @@ route.delete('/', auth, async (req, res) => {
  * @desc        Add/Update profile experience
  * @access      Private
  */
-route.put('/experience', [ auth, [
+router.put('/experience', [ auth, [
     check('title', 'Title is required').not().isEmpty(),
     check('company', 'Company is required').not().isEmpty(),
     check('from', 'From date is required').not().isEmpty()
@@ -212,7 +212,7 @@ route.put('/experience', [ auth, [
  * @desc        Delete experience from profile
  * @access      Private
  */
-route.delete('/experience/:exp_id', auth, async (req, res) => {
+router.delete('/experience/:exp_id', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id });
 
@@ -235,7 +235,7 @@ route.delete('/experience/:exp_id', auth, async (req, res) => {
  * @desc        Add/Update profile education
  * @access      Private
  */
-route.put('/education', [ auth, [
+router.put('/education', [ auth, [
     check('school', 'School is required').not().isEmpty(),
     check('degree', 'Degree is required').not().isEmpty(),
     check('fieldofstudy', 'Field of study is required').not().isEmpty(),
@@ -284,7 +284,7 @@ route.put('/education', [ auth, [
  * @desc        Delete education from profile
  * @access      Private
  */
-route.delete('/education/:edu_id', auth, async (req, res) => {
+router.delete('/education/:edu_id', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id });
 
@@ -307,7 +307,7 @@ route.delete('/education/:edu_id', auth, async (req, res) => {
  * @desc        Get user repos from Github
  * @access      Public
  */
-route.get('/github/:username', auth, async (req, res) => {
+router.get('/github/:username', auth, async (req, res) => {
     try {
         const options = {
             uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${config.get("githubClientId")}&client_secret=${config.get("githubSecret")}`,
@@ -330,4 +330,4 @@ route.get('/github/:username', auth, async (req, res) => {
     }
 });
 
-module.exports = route;
+module.exports = router;
