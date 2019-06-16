@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -20,25 +21,9 @@ const Register = ({ setAlert }) => {
         e.preventDefault();
 
         if(password !== password2) {
-            setAlert('password does not matched.', 'danger');
-            console.log('test')
+            setAlert('Password does not matched.', 'danger', 2500);
         } else {
-            console.log('test1')
-            setAlert('User registered successfully.', 'success');
-
-            // const newUser = {name, email, password};
-            // try {
-            //     const config = {
-            //         headers: {
-            //             'Content-Type': 'application/json'
-            //         }
-            //     };
-            //     const body = JSON.stringify(newUser);
-            //     const res = await axios.post('/api/users', body, config);
-            //     console.log(res.data);
-            // } catch (err) {
-            //     console.log(err);
-            // }
+            register({name, email, password});
         }
     };
 
@@ -56,16 +41,17 @@ const Register = ({ setAlert }) => {
                         value={name}
                         onChange={e => onChange(e)}
                         placeholder="Name"
-						required
+                        required
 					/>
 				</div>
 				<div className="form-group">
 					<input
-						type="email"
+						type="text"
                         name="email"
                         value={email}
                         onChange={e => onChange(e)}
-						placeholder="Email Address"
+                        placeholder="Email Address"
+                        required
 					/>
 					<small className="form-text">
 						This site uses Gravatar so if you want a profile image,
@@ -78,8 +64,10 @@ const Register = ({ setAlert }) => {
                         name="password"
                         value={password}
                         onChange={e => onChange(e)}
+                        placeholder="Password"
+                        required
                         minLength="6"
-						placeholder="Password"
+                        autoComplete="nops"
 					/>
 				</div>
 				<div className="form-group">
@@ -88,8 +76,8 @@ const Register = ({ setAlert }) => {
                         name="password2"
                         value={password2}
                         onChange={e => onChange(e)}
-						minLength="6"
-						placeholder="Confirm Password"
+                        placeholder="Confirm Password"
+                        minLength="6"
 					/>
 				</div>
 				<input type="submit" className="btn btn-primary" value="Register" />
@@ -103,7 +91,8 @@ const Register = ({ setAlert }) => {
 };
 
 Register.propType = {
-    setAlert: PropTypes.func.isRequired
+    setAlert: PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired
 }
 
-export default connect(null, { setAlert })(Register);
+export default connect(null, { setAlert, register })(Register);
