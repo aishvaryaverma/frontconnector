@@ -4,10 +4,27 @@ const auth = require('../../middleware/auth');
 const request = require('request');
 const config = require('config');
 
-const Profile = require('../../modals/Profile');
+// Data Modals
 const User = require('../../modals/User');
+const Profile = require('../../modals/Profile');
 
 const { check, validationResult } = require('express-validator/check');
+
+
+/**
+ * @Route       GET api/profile
+ * @desc        Get all profiles
+ * @access      Public
+ */
+router.get('/', async (req, res) => {
+    try {
+        const profiles = await Profile.find().populate('user', ['name', 'avatar']);
+        res.json(profiles);
+    } catch(err) {
+        console.error(err.message);
+        res.status(500).send('Server error ' + err.message);
+    }
+});
 
 /**
  * @Route       GET api/profile/me
@@ -42,6 +59,7 @@ router.post('/', [auth, [
             return res.status(400).json({ errors: errors.array() });
         }
 
+        // Pulling data from request body
         const {
             company,
             website,
@@ -57,9 +75,13 @@ router.post('/', [auth, [
             linkedin
         } = req.body;
 
-        // Build profile object
+        // Initialize profile object
         const profileFields = {};
+
+        // Setting user id value to profile object getting from request user
         profileFields.user = req.user.id;
+
+        // Checking if value exist then pushing into profile object
         if (company) profileFields.company = company;
         if (website) profileFields.website = website;
         if (location) profileFields.location = location;
@@ -67,11 +89,18 @@ router.post('/', [auth, [
         if (status) profileFields.status = status;
         if (githubusername) profileFields.githubusername = githubusername;
         if (skills) {
-            profileFields.skills = skills.split(',').map(skill => skill.trim());
+            // Creating array using split method
+            // Taking care of string // HTML, CSS , JS, jQuery, React JS, Node Js
+            // Output: ['HTML','CSS','JS','jQuery','React JS','Node JS']
+            profileFields.skills = skills
+                .split(',') // Converting String into array sprating with ","
+                .map(skill => skill.trim()); // Triming eacy item value i.e. 'React JS ' -> 'React Js' || ' jQuery' -> 'jQuery'
         }
 
-        // Build social object
+        // Initialize social object
         profileFields.social = {};
+
+        // Checking if value exist then pushing into profile object
         if (youtube) profileFields.social.youtube = youtube;
         if (twitter) profileFields.social.twitter = twitter;
         if (facebook) profileFields.social.facebook = facebook;
@@ -79,21 +108,25 @@ router.post('/', [auth, [
         if (instagram) profileFields.social.instagram = instagram;
 
         try {
+            // Getting profile of logged-in/Request user
             let profile = await Profile.findOne({ user: req.user.id });
 
+            // Checking if profile exist then update profile action runs
             if(profile) {
-                // Update User
+                // Update user
                 profile = await Profile.findOneAndUpdate(
-                    { user: req.user.id },
-                    { $set: profileFields },
+                    { user: req.user.id }, // Find the user based of request user
+                    { $set: profileFields }, // Update/Set data to database mongoose
                     { new: true }
                 )
                 return res.json(profile);
             }
 
-            // Create Profile
+            // Adding profile to database
             profile = new Profile(profileFields);
             await profile.save();
+
+            // Sending success response
             return res.json(profile);
         } catch(err) {
             console.error(err);
@@ -101,22 +134,6 @@ router.post('/', [auth, [
         }
     }
 );
-
-
-/**
- * @Route       GET api/profile
- * @desc        Get all profiles
- * @access      Public
- */
-router.get('/', async (req, res) => {
-    try {
-        const profiles = await Profile.find().populate('user', ['name', 'avatar']);
-        res.json(profiles);
-    } catch(err) {
-        console.error(err.message);
-        res.status(500).send('Server error ' + err.message);
-    }
-});
 
 /**
  * @Route       GET api/profile/user/:user_id
@@ -310,10 +327,14 @@ router.delete('/education/:edu_id', auth, async (req, res) => {
 router.get('/github/:username', auth, async (req, res) => {
     try {
         const options = {
-            uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&client_id=${config.get("githubClientId")}&client_secret=${config.get("githubSecret")}`,
-            method: "GET",
-            headers: { "user-agent": "node.js" }
-        };
+            uri: `https://api.github.com/users/${
+              req.params.username
+            }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+              'githubClientId'
+            )}&client_secret=${config.get('githubSecret')}`,
+            method: 'GET',
+            headers: { 'user-agent': 'node.js' }
+          };
 
         request(options, (error, response, body) => {
             if (error) console.error(error);

@@ -11,7 +11,7 @@ const { check, validationResult } = require('express-validator/check');
 
 /**
  * @Route       GET api/auth
- * @desc        Get User if Authorized
+ * @desc        Get user details if Authorized or Logged In
  * @access      Public
  */
 router.get('/', auth, async (req, res) => {
@@ -27,7 +27,7 @@ router.get('/', auth, async (req, res) => {
 
 /**
  * @Route       POST api/auth
- * @desc        Authenticate user and get Token
+ * @desc        Login/Authenticate user and get Token
  * @access      Public
  */
 router.post('/', [
