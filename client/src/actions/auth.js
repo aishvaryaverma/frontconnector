@@ -7,22 +7,28 @@ export const loadUser = () => async dispatch => {
     if(localStorage.token) {
         // This will set HEADERS for HTTP Request
         setAuthToken(localStorage.token);
-    }
-    try {
-        // Getting user from database (using our backend API)
-        const res = await axios.get('api/auth');
 
-        // Dispatching action and payload to Reducer
-        dispatch({
-            type: USER_LOADED,
-            payload: res.data
-        })
-    } catch (err) {
-        // Dispatching action to Reducer
+        try {
+            // Getting user from database (using our backend API)
+            const res = await axios.get('api/auth');
+    
+            // Dispatching action and payload to Reducer
+            dispatch({
+                type: USER_LOADED,
+                payload: res.data
+            });
+        } catch (err) {
+            // Dispatching action to Reducer
+            dispatch({
+                type: AUTH_ERROR
+            });
+        }
+    } else {
         dispatch({
             type: AUTH_ERROR
         })
     }
+    
 };
 
 export const register = ({name, email, password}) => async dispatch => {

@@ -1,11 +1,14 @@
 import React, { Fragment, useEffect } from "react";
 import {BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import PrivateRoute from './components/routing/PrivateRoute';
 // Global Styles
 import "./App.css";
 // Layouts
 import Navbar from './components/layouts/Navbar';
 import Landing from './components/layouts/Landing';
 import Alert from './components/layouts/Alert';
+//Dashboard
+import Dashboard from './components/dashboard/Dashboard';
 // Auth Components
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -37,6 +40,7 @@ const App = () => {
 						<Switch>
 							<Route exact path="/login" component={Login} />
 							<Route exact path="/register" component={Register} />
+							<PrivateRoute exact path="/dashboard" component={Dashboard} />
 						</Switch>
 					</section>
 				</Fragment>
