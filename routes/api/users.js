@@ -76,10 +76,10 @@ router.post('/', [
 
         // Generating jsonwebtoken
         jwt.sign(
-            payload, // This will container user id we got back from database // auto generated user id from mongoDB
+            payload, // This will contains user id we got back from database // auto generated user id from mongoDB
             config.get('jwtSecret'), // This is our manual secret key
-            { expiresIn: 360000 }, // Setting the exipre time value
-            function(err, token) {
+            { expiresIn: 360000 }, // Setting the expire time value
+            function(err, token) { // Callback function
                 if(err) throw err;
                 res.json({ token })
             }

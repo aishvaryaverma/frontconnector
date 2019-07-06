@@ -11,8 +11,8 @@ const { check, validationResult } = require('express-validator/check');
 
 /**
  * @Route       GET api/auth
- * @desc        Get user details if Authorized or Logged In
- * @access      Public
+ * @desc        Get user details if Authorized or Logged in
+ * @access      Private
  */
 router.get('/', auth, async (req, res) => {
     try {
@@ -22,7 +22,6 @@ router.get('/', auth, async (req, res) => {
         console.error(err);
         res.status(500).send(err.message);
     }
-    // res.send(req.user)
 });
 
 /**
@@ -34,6 +33,7 @@ router.post('/', [
     check('email', 'Please enter a valid email').isEmail(),
     check('password', 'Password is required').exists()
 ], async (req, res) => {
+
     const errors = validationResult(req);
 
     if(!errors.isEmpty()) {

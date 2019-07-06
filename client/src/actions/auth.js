@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 import setAuthToken from '../utils/setAuthToken';
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from './types';
+import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_PROFILE } from './types';
 
 export const loadUser = () => async dispatch => {
     if(localStorage.token) {
@@ -10,7 +10,7 @@ export const loadUser = () => async dispatch => {
 
         try {
             // Getting user from database (using our backend API)
-            const res = await axios.get('api/auth');
+            const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/auth`);
     
             // Dispatching action and payload to Reducer
             dispatch({
@@ -19,16 +19,17 @@ export const loadUser = () => async dispatch => {
             });
         } catch (err) {
             // Dispatching action to Reducer
+            console.log('Case 1: API Error');
             dispatch({
                 type: AUTH_ERROR
             });
         }
     } else {
+        console.log('Case 2 : No Token');
         dispatch({
             type: AUTH_ERROR
-        })
+        });
     }
-    
 };
 
 export const register = ({name, email, password}) => async dispatch => {
@@ -39,7 +40,7 @@ export const register = ({name, email, password}) => async dispatch => {
             }
         };
         const body = JSON.stringify({name, email, password});
-        const res = await axios.post('/api/users', body, config);
+        const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users`, body, config);
 
         // Dispatching action and payload to Reducer
         dispatch({
@@ -71,7 +72,7 @@ export const login = (email, password) => async dispatch => {
             }
         };
         const body = JSON.stringify({email, password});
-        const res = await axios.post('/api/auth', body, config);
+        const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/auth`, body, config);
 
         // Dispatching action and payload to Reducer
         dispatch({
@@ -84,17 +85,21 @@ export const login = (email, password) => async dispatch => {
         dispatch(setAlert("Login Successful", 'success'));
     } catch (err) {
         // Showing server side error msg to users
-        const errors = err.response.data.errors;
-        if(errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, 'danger') ))
+        if(err.response.status === 400) {
+
+            const errors = err.response.data.errors;
+            if(errors) {
+                errors.forEach(error => dispatch(setAlert(error.msg, 'danger') ))
+            }
+            
+            // Dispatching action to Reducer
+            dispatch({type: LOGIN_FAIL});
         }
-        
-        // Dispatching action to Reducer
-        dispatch({type: LOGIN_FAIL});
     }
 };
 
 // Logout // Clear Profile
 export const logout = () => dispatch => {
+    dispatch({ type: CLEAR_PROFILE });
     dispatch({ type: LOGOUT });
-}
+};
