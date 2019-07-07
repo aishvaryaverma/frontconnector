@@ -10,7 +10,8 @@ export const loadUser = () => async dispatch => {
 
         try {
             // Getting user from database (using our backend API)
-            const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/auth`);
+            // const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/auth`);
+            const res = await axios.get(`/api/auth`);
     
             // Dispatching action and payload to Reducer
             dispatch({
@@ -40,7 +41,8 @@ export const register = ({name, email, password}) => async dispatch => {
             }
         };
         const body = JSON.stringify({name, email, password});
-        const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users`, body, config);
+        // const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/users`, body, config);
+        const res = await axios.post(`/api/users`, body, config);
 
         // Dispatching action and payload to Reducer
         dispatch({
@@ -72,7 +74,8 @@ export const login = (email, password) => async dispatch => {
             }
         };
         const body = JSON.stringify({email, password});
-        const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/auth`, body, config);
+        // const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/auth`, body, config);
+        const res = await axios.post(`/api/auth`, body, config);
 
         // Dispatching action and payload to Reducer
         dispatch({

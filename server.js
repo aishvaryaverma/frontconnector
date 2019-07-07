@@ -7,7 +7,7 @@ const connectDb = require('./config/db');
 connectDb();
 
 // CORS
-app.use(cors());
+// app.use(cors());
 
 // Init Middleware
 app.use(express.json({ extended: false }));

@@ -24,7 +24,7 @@ const Dashboard = ({
         {
             profile !== null ? (<Fragment>Has Profile</Fragment>) : (<Fragment>
                 <p>No Profile Found. Please create profile:</p>
-                <Link to="/create-profile" className="btn btn-info">Create Profile</Link>
+                <Link to="/create-profile" className="btn btn-dark mt-2">Create Profile</Link>
             </Fragment>)
         }
     </Fragment>
