@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { addEducation } from '../../../actions/profile';
+import { addEducation } from '../../../actions/profile';
 
 const AddEducation = ({ addEducation, history }) => {
     const [formData, setFormData] = useState({
@@ -32,7 +32,13 @@ const AddEducation = ({ addEducation, history }) => {
 
     return (
         <Fragment>
-            <h1 className='large text-primary'>Add Your Education</h1>
+            <div className="headingBox">
+                <h1 className='large text-primary'>Add Your Education</h1>
+                <Link className='btn btn-light my-1' to='/dashboard'>
+                    Go Back
+                </Link>
+            </div>
+            
             <p className='lead'>
                 <i className='fas fa-code-branch' /> Add any school or bootcamp that you
                 have attended
@@ -133,5 +139,5 @@ AddEducation.propTypes = {
 
 export default connect(
     null,
-    // { addEducation }
+    { addEducation }
 )(withRouter(AddEducation));

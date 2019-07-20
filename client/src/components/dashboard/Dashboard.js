@@ -13,6 +13,7 @@ const Dashboard = ({
     profile: { profile, loading }
 }) => {
     useEffect(() => {
+        window.scrollTo(0, 0);
         getCurrentProfile();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

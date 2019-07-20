@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { addExperience } from '../../../actions/profile';
+import { addExperience } from '../../../actions/profile';
 
 const AddExperience = ({ addExperience, history }) => {
     const [formData, setFormData] = useState({
@@ -24,7 +24,12 @@ const AddExperience = ({ addExperience, history }) => {
 
     return (
         <Fragment>
-            <h1 className='large text-primary'>Add An Experience</h1>
+            <div className="headingBox">
+                <h1 className='large text-primary'>Add An Experience</h1>
+                <Link className='btn btn-light my-1' to='/dashboard'>
+                    Go Back
+                </Link>
+            </div>
             <p className='lead'>
                 <i className='fas fa-code-branch' /> Add any developer/programming positions
                 that you have had in the past
@@ -125,5 +130,5 @@ AddExperience.propTypes = {
 
 export default connect(
     null,
-    // { addExperience }
+    { addExperience }
 )(withRouter(AddExperience));
