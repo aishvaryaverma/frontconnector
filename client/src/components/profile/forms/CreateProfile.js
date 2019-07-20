@@ -1,5 +1,8 @@
 import React, { Fragment, useState } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { createProfile } from '../../../actions/profile';
 
 const CreateProfile = props => {
     const [formData, setFormData] = useState({
@@ -37,7 +40,24 @@ const CreateProfile = props => {
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
     
     const onSubmit = e => {
-        // e.preventDefault();
+        alert('adfasd')
+        e.preventDefault();
+        console.log({
+            company,
+            website,
+            location,
+            status,
+            skills,
+            githubusername,
+            bio,
+            twitter,
+            facebook,
+            linkedin,
+            youtube,
+            instagram
+        });
+        const { createProfile, history } = props;
+        createProfile(formData, history);
     }
 
     return (
@@ -148,15 +168,14 @@ const CreateProfile = props => {
                 }
 
                 <input type="submit" className="btn btn-primary my-1" />
-                <a className="btn btn-light my-1" href="dashboard.html">Go Back</a>
+                <Link className="btn btn-light my-1" to="/dashboard">Go Back</Link>
             </form>
         </Fragment>
     )
 }
 
-
 CreateProfile.propTypes = {
-
+    createProfile: PropTypes.func.isRequired
 }
 
-export default CreateProfile;
+export default connect(null, { createProfile })(CreateProfile);

@@ -35,7 +35,7 @@ router.get('/me', auth, async (req, res) => {
     try {
         const profile = await Profile.findOne({ user: req.user.id }).populate('user', ['name', 'avatar']);
         if(!profile) {
-            res.status(400).json({ msg: 'There is no profile for this user' })
+            return res.status(400).json({ msg: 'There is no profile for this user' })
         }
         res.json(profile);
     } catch(err) {
@@ -127,7 +127,7 @@ router.post('/', [auth, [
             await profile.save();
 
             // Sending success response
-            return res.json(profile);
+            res.json(profile);
         } catch(err) {
             console.error(err);
             res.status(400).send('Server error');
@@ -216,8 +216,7 @@ router.put('/experience', [ auth, [
         const profile = await Profile.findOne({ user: req.user.id });
         profile.experience.unshift(newExp);
         await profile.save();
-        res.send(profile)
-
+        res.send(profile);
     } catch(err) {
         console.error(err.message);
         res.status(500).send('Server error');

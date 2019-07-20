@@ -1,13 +1,23 @@
 const express = require('express');
-const app = express();
-const cors = require('cors');
 const connectDb = require('./config/db');
+// const cors = require('cors');
+const app = express();
 
 // Connect Database
 connectDb();
 
 // CORS
-// app.use(cors());
+// var whitelist = ['http://localhost:3000', 'http://127.0.0.1:3000']
+// var corsOptions = {
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1) {
+//             callback(null, true)
+//         } else {
+//             callback(new Error('Not allowed by CORS'))
+//         }
+//     }
+// }
+// app.use(cors(corsOptions));
 
 // Init Middleware
 app.use(express.json({ extended: false }));
