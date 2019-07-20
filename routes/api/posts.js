@@ -5,9 +5,9 @@ const { check, validationResult } = require('express-validator/check');
 const auth = require('../../middleware/auth');
 
 // Modals
-const User = require('../../modals/User');
-const Profile = require('../../modals/Profile');
-const Post = require('../../modals/Post');
+const User = require('../../models/User');
+const Profile = require('../../models/Profile');
+const Post = require('../../models/Post');
 
 /**
  * @Route       POST api/posts

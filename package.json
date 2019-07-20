@@ -1,6 +1,9 @@
 {
   "name": "devconnector",
   "version": "1.0.0",
+  "nodemonConfig": {
+    "ignore": ["client/*", "client/**/*.js"]
+  },
   "description": "Social networking app for developers",
   "main": "index.js",
   "scripts": {

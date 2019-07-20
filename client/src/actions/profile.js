@@ -2,10 +2,11 @@ import { GET_PROFILE, PROFILE_ERROR } from './types';
 import { setAlert } from './alert';
 import axios from 'axios';
 
+// Get Current logged in user profile
 export const getCurrentProfile = () => async dispatch => {
     try {
         // const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/profile/me`);
-        const res = await axios.get(`/api/profile/me`);
+        const res = await axios.get('/api/profile/me');
         dispatch({
             type: GET_PROFILE,
             payload: res.data
@@ -17,10 +18,11 @@ export const getCurrentProfile = () => async dispatch => {
                 payload: { msg: err.response.data.msg, status: err.response.status }
             });
         }
-        console.clear();
+        // console.clear();
     }
 };
 
+// Create and Update Profile Action
 export const createProfile = (formData, history, edit = false) => async dispatch => {
     try {
         const config = {
@@ -40,7 +42,7 @@ export const createProfile = (formData, history, edit = false) => async dispatch
 		
 		if (!edit) {
 			history.push('/dashboard');
-		}
+        }
 	} catch (err) {
 		const errors = err.response.data.errors;
 

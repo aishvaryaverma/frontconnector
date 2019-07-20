@@ -4,9 +4,9 @@ const auth = require('../../middleware/auth');
 const request = require('request');
 const config = require('config');
 
-// Data Modals
-const User = require('../../modals/User');
-const Profile = require('../../modals/Profile');
+// Data Models
+const User = require('../../models/User');
+const Profile = require('../../models/Profile');
 
 const { check, validationResult } = require('express-validator/check');
 

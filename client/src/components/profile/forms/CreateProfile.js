@@ -40,22 +40,7 @@ const CreateProfile = props => {
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
     
     const onSubmit = e => {
-        alert('adfasd')
         e.preventDefault();
-        console.log({
-            company,
-            website,
-            location,
-            status,
-            skills,
-            githubusername,
-            bio,
-            twitter,
-            facebook,
-            linkedin,
-            youtube,
-            instagram
-        });
         const { createProfile, history } = props;
         createProfile(formData, history);
     }
