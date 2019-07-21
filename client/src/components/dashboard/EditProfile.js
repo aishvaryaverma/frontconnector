@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
-import { createProfile, getCurrentProfile } from '../../../actions/profile';
+import { Link } from 'react-router-dom';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 
 const EditProfile = ({
     profile: { profile, loading },
@@ -239,4 +239,4 @@ const mapStateToProps = state => ({
 export default connect(
     mapStateToProps,
     { createProfile, getCurrentProfile }
-)(withRouter(EditProfile));
+)(EditProfile);

@@ -7,9 +7,8 @@ const config = require('config');
 // Data Models
 const User = require('../../models/User');
 const Profile = require('../../models/Profile');
-
+const Post = require('../../models/Post');
 const { check, validationResult } = require('express-validator/check');
-
 
 /**
  * @Route       GET api/profile
@@ -162,6 +161,8 @@ router.get('/user/:user_id', async (req, res) => {
 router.delete('/', auth, async (req, res) => {
     try {
         // @TODO - Delte Post
+        // Delete users Posts
+        await Post.deleteMany({ user: req.user.id });
 
         // Delete Profile
         await Profile.findOneAndDelete({ user: req.user.id });

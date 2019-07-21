@@ -9,27 +9,33 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-    CLEAR_PROFILE
+    REMOVE_ALL_ALERT
+    // CLEAR_PROFILE
 } from './types';
 
 export const loadUser = () => async dispatch => {
     if(localStorage.token) {
         // This will set HEADERS for HTTP Request
         setAuthToken(localStorage.token);
-    }
-    try {
-        // Getting user from database (using our backend API)
-        // const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/auth`);
-        const res = await axios.get('/api/auth');
+        try {
+            // Getting user from database (using our backend API)
+            // const res = await axios.get(`${process.env.REACT_APP_SERVER}/api/auth`);
+            const res = await axios.get('/api/auth');
 
-        // Dispatching action and payload to Reducer
-        dispatch({
-            type: USER_LOADED,
-            payload: res.data
-        });
-    } catch (err) {
-        // Dispatching action to Reducer
-        console.log('Case 1: API Error');
+            // Dispatching action and payload to Reducer
+            dispatch({
+                type: USER_LOADED,
+                payload: res.data
+            });
+        } catch (err) {
+            // Dispatching action to Reducer
+            console.log('Case 1: API Error');
+            dispatch({
+                type: AUTH_ERROR
+            });
+        }
+    } else {
+        console.log('Case 2: No Token in storage');
         dispatch({
             type: AUTH_ERROR
         });
@@ -58,6 +64,7 @@ export const register = ({name, email, password}) => async dispatch => {
         // Showing alerts msg to user
         dispatch(setAlert("Registered Successfully", 'success'));
     } catch (err) {
+        dispatch({ type: REMOVE_ALL_ALERT });
         // Showing server side error msg to users
         const errors = err.response.data.errors;
         if(errors) {
@@ -87,9 +94,10 @@ export const login = (email, password) => async dispatch => {
         });
 
         dispatch(loadUser());
-
+        dispatch({ type: REMOVE_ALL_ALERT });
         dispatch(setAlert("Login Successful", 'success'));
     } catch (err) {
+        dispatch({ type: REMOVE_ALL_ALERT });
         // Showing server side error msg to users
         if(err.response.status === 400) {
 
@@ -106,6 +114,6 @@ export const login = (email, password) => async dispatch => {
 
 // Logout // Clear Profile
 export const logout = () => dispatch => {
-    dispatch({ type: CLEAR_PROFILE });
+    // dispatch({ type: CLEAR_PROFILE });
     dispatch({ type: LOGOUT });
 };

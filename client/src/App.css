@@ -148,12 +148,41 @@ img {
 	color: #333;
 }
 
+.alert-wrap {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 999;
+	min-width: 400px;
+
+}
 .alert {
-	padding: 0.8rem;
-	margin: 1rem 0;
-	opacity: 0.9;
-	background: var(--light-color);
+	position: relative;
+	padding: 10px 10px 10px 20px;
 	color: #333;
+	background: var(--light-color);
+	margin-bottom: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	/* animation: slideFromRight 250ms ease-out;
+	animation-delay: 400ms; */
+}
+.alert .text {
+	flex-grow: 1;
+	flex-basis: auto;
+}
+.alert .close {
+	width: 24px;
+	cursor: pointer;
+	text-align: center;
+}
+.alert .close:hover {
+	background: rgba(0, 0, 0, 0.1);
+}
+@keyframes slideFromRight {
+	from { right: -100%; }
+	to { right: 20px; }
 }
 
 .btn-primary,
@@ -399,9 +428,15 @@ button {
 
 .profile-about .skills {
 	display: flex;
+	flex-wrap: wrap;
+	text-align: center;
 	align-items: center;
 	justify-content: center;
-	text-align: center;
+}
+.profile-about .skills .p-1 i {
+	display: block;
+	color: green;
+	margin-bottom: 5px;
 }
 
 .profile-exp {
