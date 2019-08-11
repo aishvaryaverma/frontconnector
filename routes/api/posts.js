@@ -157,7 +157,7 @@ router.put('/like/:id', auth, async (req, res) => {
         
         // Check if post already liked by this/current/logged-in user
         if(post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
-            return res.status(404).json({ msg: 'Post already liked.' })
+            return res.status(400).json({ msg: 'Post already liked.' })
         }
 
         // Adding data to database
@@ -187,7 +187,7 @@ router.put('/unlike/:id', auth, async (req, res) => {
         
         // Check if post not liked by this/current/logged-in user
         if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
-            return res.status(404).json({ msg: 'Post has not yet been liked.' })
+            return res.status(400).json({ msg: 'Post has not yet been liked.' })
         }
 
         // Getting index of post as likes type is array in database
@@ -220,7 +220,7 @@ router.post('/comment/:id', [ auth, [
 
     // Checking for errors found and sending error response
     if(!errors.isEmpty()) {
-        res.status(404).json({ errors: errors.array() });
+        res.status(400).json({ errors: errors.array() });
     }
     
     try {
@@ -253,7 +253,7 @@ router.post('/comment/:id', [ auth, [
 });
 
 /**
- * @Route       DELETE api/posts/comment/post_id/comment_id
+ * @Route       DELETE api/posts/comment/:id/:comment_id
  * @desc        Delete a comment
  * @access      Private
  */
@@ -262,20 +262,25 @@ router.delete('/comment/:post_id/:comment_id', auth, async (req, res) => {
         // Getting single post by ID passed in URL from database mongoose
         const post = await Post.findById(req.params.post_id);
 
-        // Find the index of comment in posts.comments array based on comment id passed in URL
-        const removeIndex = post.comments.findIndex(comment => comment.id === req.params.comment_id);
+        // Pull out comment
+        const comment = post.comments.find(
+            comment => comment.id === req.params.comment_id
+        );
+
+        // Checking if the post exits in database
+        if(!comment) {
+            return res.status(404).json({ msg: 'Comment does not exist' })
+        }
 
         // Check is request user is authrized to do this action
         // Checking the request user with the user which we have in post(got from database)
-        if(post.user.toString() !== req.user.id) {
-            return res.status(401).json({ msg: "This user is not authorized to delete comment." })
-        }
-
-        // Checking if the post exits in database
-        if(removeIndex < 0) {
-            return res.status(404).json({ msg: 'Comment does not exits' })
+        if(comment.user.toString() !== req.user.id) {
+            return res.status(401).json({ msg: "User not authorized" })
         }
         
+        // Find the index of comment in posts.comments array based on comment id passed in URL
+        const removeIndex = post.comments.findIndex(comment => comment.id === req.params.comment_id);
+
         // Removing post from database
         post.comments.splice(removeIndex, 1);
         await post.save();
