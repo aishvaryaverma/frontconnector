@@ -1,0 +1,6 @@
+{
+    "mongoURI": "mongodb+srv://vsonu9020:vsonu9020@devconnector-slwll.mongodb.net/test?retryWrites=true&w=majority",
+    "jwtSecret": "mySecretToken",
+    "githubClientId": "6f91879734df01d87343",
+    "githubSecret": "d0370493e6aea845e59ba3c954606cb3e5befe08"
+}
